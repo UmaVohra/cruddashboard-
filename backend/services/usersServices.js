@@ -36,8 +36,21 @@ export const insertUser=async(name,age,address,email)=>{
 
 }
 
-export const dispUser=async()=>{
-    const disp=await pool.query("select * from users" );
+export const dispUser=async(page,limit,search,age)=>{
+    let query="select * from users where 1=1";
+   if(search){
+    query+=` and email ilike '%${search}%' `;
+   }
+   if(age){
+    query+=` and age=${age}`;
+   }
+    const offset=(page-1)*limit;
+
+    query+=` limit ${limit} offset ${offset}`;
+
+    //const disp=await pool.query("select * from users limit $1 offset $2",[limit,offset] );
+    const disp=await pool.query(query);
+
     return disp.rows;
 }
 

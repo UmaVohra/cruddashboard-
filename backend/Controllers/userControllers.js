@@ -11,7 +11,7 @@ export const insert=async(req,res)=>{
         res.json({error:err.message});
     }
 }
-
+/*
 export const display=async(req,res)=>{
     try{
     const result=await dispUser();
@@ -21,7 +21,27 @@ export const display=async(req,res)=>{
     catch(err){
         res.json({error:err.message});
     }
+}*/
+export const display=async(req,res)=>{
+    try{
+        const page =parseInt(req.query.page)||1;
+        console.log(page);
+        const limit=parseInt(req.query.limit)||4;
+
+        const search=req.query.search||"";
+        const age=Number(req.query.age||"");
+        console.log(age);
+        const result=await dispUser(page,limit,search,age);
+        res.json({
+            mssg:"displaying :",result
+        });
+    }
+    catch(err){
+        res.json({error:err.message});
+    }
 }
+
+
 export const del=async(req,res)=>{
     try{
         const {id}=req.params;
