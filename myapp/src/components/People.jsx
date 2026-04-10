@@ -107,6 +107,9 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
       },
     });
     const resp = await res.json();
+    if(res.ok){
+      toast("Successfully deleted");
+    }
     getUsers(); //to automatically refresh table
     console.log(resp);
   };
@@ -162,7 +165,7 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter Email"
             />{" "}
-            {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
+            {errors.email && <p style={{ color: "red"}}>{errors.email}</p>}
             <button
               className="bg-green-500 rounded cursor-pointer text-white  p-2 "
               onClick={(id) => handleInput(id)}
@@ -198,13 +201,9 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
           </h1>
         { /*<button
             className="sm:ml-50 border-0 w-36 rounded-2xl py-2 mr-14  font-semibold cursor-pointer bg-gray-600 "
-            onClick={handleForm}
-          >
-            {" "}
-            Create Form{" "}
-          </button>*/}
+            onClick={handleForm} > {" "}  Create Form{" "}</button>*/}
         </div>
-         <div className="flex justify-between items-center flex-row  "> <div className="flex items-start justify-center flex-row "><p className="text-white ml-48  mt-6 flex flex-row">Search
+         <div className="flex justify-between items-center flex-row  "> <div className="flex items-start justify-center flex-row "><p className="text-white ml-48  mt-3 flex flex-row">Search
           <input
             type="text" placeholder="search by email"
             className="border focus:outline-none rounded ml-2 focus:ring-2 focus:ring-blue-400 "
@@ -212,7 +211,7 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
           />
           </p>{/* ml-3 mb-8 mt-5*/}
 
-         <p className="text-white mt-6 ml-3 flex flex-row ">Filter
+         <p className="text-white mt-3 ml-3 flex flex-row ">Filter
           <input
             type="text" placeholder="filter by age"
             className=" border focus:outline-none rounded ml-2 focus:ring-2 focus:ring-blue-400"
@@ -227,43 +226,12 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
           </button>
      </div>
 
-        {/* <table className=" mt-40 m-96 w-full max-w-6xl sm:ml-40  border-gray-600 rounded-lg overflow-hidden">
-          <thead className="bg-gray-600 text-gray-300 ">
-            <tr>
-              <th>name</th>
-              <th>age</th>
-              <th>address</th>
-              <th>email</th>
-              <th colSpan={2}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((user) => (
-              <tr key={user.id} className="p-3 text-center">
-                <td>{user.name}</td>
-                <td>{user.age}</td>
-                <td>{user.address}</td>
-                <td>{user.email}</td>
-                <td>
-                  <button
-                    className="cursor-pointer"
-                    onClick={() => handleDelete(user.id)}
-                  >
-                    delete
-                  </button>
-                </td>
-                <td>
-                  <button onClick={() => handleEdit(user.id)}>edit</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
-        {data.length === 0 ? (
+
+       {/* {data.length === 0 ? (
           <h1 className="font-bold ml-20">no user found</h1>
-        ) : (
+        ) : (*/}
           <div className="mt-10 flex justify-center">
-            <table className="w-full max-w-5xl bg-gray-800 text-white rounded-xl overflow-hidden shadow-lg">
+            <table className="w-full max-w-5xl bg-gray-800  text-white rounded-xl overflow-hidden shadow-lg">
               <thead className="bg-gray-700 text-gray-300 uppercase text-sm">
                 <tr>
                   <th className="p-4 text-left">Name</th>
@@ -275,6 +243,9 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
                   </th>
                 </tr>
               </thead>
+              {data.length === 0 ? (
+          <h1 className="font-bold ml-44 text-xl ">No user found</h1>
+        ) : (
 
               <tbody>
                 {data.map((user) => (
@@ -308,10 +279,10 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
                     </td>
                   </tr>
                 ))}
-              </tbody>
+              </tbody>)}
             </table>
           </div>
-        )}
+       {/* )}*/ }
 
        
         <div className="mt-4  flex items-center justify-center">

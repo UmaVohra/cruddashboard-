@@ -30,8 +30,8 @@ export const signin=async(email,password)=>{
 
 
 
-export const insertUser=async(name,age,address,email)=>{
-    const insert=await pool.query("insert into users(name,age,address,email)values ($1,$2,$3,$4) returning *",[name,age,address,email]);
+export const insertUser=async(name,age,address,email,image)=>{
+    const insert=await pool.query("insert into users(name,age,address,email,image)values ($1,$2,$3,$4,$5) returning *",[name,age,address,email,image]);
     return insert.rows[0];
 
 }
