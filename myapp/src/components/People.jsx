@@ -8,6 +8,10 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
   const [email, setEmail] = useState("");
   const [age, setAge] = useState(0);
   const [address, setAddress] = useState("");
+
+  const[file,setFile]=useState(null);
+
+  const [existingImage,setExistingimage]=useState("");
   const [editId, seteditId] = useState(null);
 
   const [openForm, setOpenform] = useState();
@@ -48,8 +52,8 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
     if (Object.keys(newErrors).length === 0) {
       setErrors({});
 
-      if (editId) {
-        const body = { name: name, email: email, age: age, address: address };
+      if (editId) {//without img edit
+      {  /*const body = { name: name, email: email, age: age, address: address };
         console.log(body);
 
         const res = await fetch(`http://localhost:3000/api/edit/${editId}`, {
@@ -69,9 +73,34 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
 
         if (!res.ok) {
           console.log(res.error);
-        }
+        }*/}const formdata=new FormData();
+        formdata.append("name",name);
+        formdata.append("age",age);
+        formdata.append("address",address);
+        formdata.append("email",email);
+        formdata.append("image",file);
+
+        const res=await fetch(`http://localhost:3000/uploadapi/editImg/${editId}`,{
+          method:"PUT",
+          headers:{
+            "authorization":`${tokenVal}`
+          },body:formdata });
+          const resp=await res.json();
+          if(res.ok){
+            toast.success("edit done successfuly");
+          }
+          if(!res.ok){
+            toast.error("error in inserting")
+          }
+          getUsers();
+          setName(""),setAge(0),setAddress(""),setEmail(""),setFile(null);
+          setOpenform(false);
+
+
+
       } else {
-        const body = { name: name, email: email, age: age, address: address };
+        //without image insert
+       { /*const body = { name: name, email: email, age: age, address: address };
         console.log(body);
         const res = await fetch("http://localhost:3000/api/insert", {
           method: "POST",
@@ -92,7 +121,35 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
         setName("");
         setAge(0);
         setEmail("");
-        setAddress("");
+        setAddress("");*/}
+        const formdata=new FormData();
+        formdata.append("name",name);
+        formdata.append("age",age);
+        formdata.append("email",email);
+        formdata.append("address",address);
+        formdata.append("image",file);
+
+       const res=await fetch("http://localhost:3000/uploadapi/image",{
+        method:"POST",
+        headers:{
+          "authorization":`${tokenVal}`,
+        },body:formdata
+       });
+       const resp=await res.json();
+       if(res.ok){
+         toast.success("inserted!!");
+       }
+       if(!res.ok){
+        toast.error("error in inserting");
+       }
+       //setPage(1);
+       getUsers();
+       setName("");
+       setAge(0);
+       setEmail("");
+       setAddress("");
+       setFile(null);
+
         setOpenform(false);
       }
     }
@@ -124,6 +181,7 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
     setAddress(find.address);
     setAge(find.age);
     setEmail(find.email);
+    setExistingimage(find.image);
     // console.log(id);
   };
   return (
@@ -131,6 +189,10 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
       {openForm && (
         <div className="fixed inset-0 flex items-center justify-center ">
           <div className="text-black bg-white rounded p-6 w-80">
+            <h2 className="text-lg font-bold mb-4">Upload Image</h2>
+            <input type="file" className="border w-full p-2 mb-4" onChange={(e)=>setFile(e.target.files[0])}/> 
+            {existingImage && !file &&<p>selected img:{existingImage}</p>}
+
             <h2 className="text-lg font-bold mb-4">Enter Name</h2>
             <input
               type="text"
@@ -238,6 +300,7 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
                   <th className="p-4 text-left">Age</th>
                   <th className="p-4 text-left">Address</th>
                   <th className="p-4 text-left">Email</th>
+                  <th className="p-4 text-left">Image</th>
                   <th className="p-4 text-center" colSpan={2}>
                     Actions
                   </th>
@@ -257,6 +320,7 @@ function People({data, getUsers, tokenVal, pageNo, setPage,limit,setLimit,search
                     <td className="p-4">{user.age}</td>
                     <td className="p-4">{user.address}</td>
                     <td className="p-4">{user.email}</td>
+                    <td> <img src={user.image} width={70}/></td>
 
                     <td className="p-4 text-center">
                       <button

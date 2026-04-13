@@ -44,9 +44,11 @@ export const dispUser=async(page,limit,search,age)=>{
    if(age){
     query+=` and age=${age}`;
    }
+
+   query+=` order by id desc`;
     const offset=(page-1)*limit;
 
-    query+=` limit ${limit} offset ${offset}`;
+  query+=` limit ${limit} offset ${offset}`;
 
     //const disp=await pool.query("select * from users limit $1 offset $2",[limit,offset] );
     const disp=await pool.query(query);
@@ -58,9 +60,9 @@ export const deleteUser=async(id)=>{
     const del=await pool.query("delete from users where id=$1",[id]);
 
 }
-export const editUser=async(id,name,age,address,email)=>{
-    const edit=await pool.query("update users set name=$1,age=$2,address=$3,email=$4 where id=$5 returning *",
-        [name,age,address,email,id]);
+export const editUser=async(id,name,age,address,email,image)=>{
+    const edit=await pool.query("update users set name=$1,age=$2,address=$3,email=$4,image=$5 where id=$6 returning *",
+        [name,age,address,email,image,id]);
         return edit.rows[0];
     
     }
